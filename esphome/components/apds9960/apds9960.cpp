@@ -161,15 +161,19 @@ void APDS9960::dump_config() {
   }
 
 void APDS9960::update() {
+}
+
+void APDS9960::loop() { 
+  
   uint8_t status;
   APDS9960_WARNING_CHECK(this->read_byte(0x93, &status), "Reading status bit failed.");
   this->status_clear_warning();
 
   this->read_color_data_(status);
   this->read_proximity_data_(status);
+  
+  this->read_gesture_data_(); 
 }
-
-void APDS9960::loop() { this->read_gesture_data_(); }
 
 void APDS9960::read_color_data_(uint8_t status) {
   if (!this->is_color_enabled_())
